@@ -29,6 +29,7 @@ export default function Home() {
             <a href="#features" className="hover:text-white transition">Features</a>
             <a href="#rules" className="hover:text-white transition">Rules</a>
             <Link href="/blog" className="hover:text-white transition">Blog</Link>
+            <Link href="/ioc" className="hover:text-white transition">IOC Feed</Link>
             <Link href="/scan" className="px-4 py-2 bg-white text-black rounded-lg font-medium hover:bg-gray-200 transition">
               Scan Now
             </Link>

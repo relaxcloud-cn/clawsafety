@@ -1,0 +1,93 @@
+{
+  "feed": "ClawSafety Agent Skill IOC Feed",
+  "version": "1.0",
+  "updated": "2026-03-23",
+  "url": "https://clawsafety.yisec.ai/ioc",
+  "license": "CC BY 4.0",
+  "publisher": {
+    "name": "YiSec / ClawSafety",
+    "url": "https://yisec.ai"
+  },
+  "campaigns": [
+    {
+      "name": "ClawHavoc",
+      "first_seen": "2026-01-27",
+      "status": "active",
+      "description": "Large-scale supply chain poisoning via ClawHub, distributing AMOS macOS stealer",
+      "references": [
+        "https://www.koi.ai/blog/clawhavoc-341-malicious-clawedbot-skills-found-by-the-bot-they-were-targeting",
+        "https://thehackernews.com/2026/02/researchers-find-341-malicious-clawhub.html"
+      ]
+    },
+    {
+      "name": "SANDWORM_MODE",
+      "first_seen": "2026-02-20",
+      "status": "active",
+      "description": "MCP config injection worm spreading through typosquatted npm packages",
+      "references": []
+    },
+    {
+      "name": "Fake Installer (Huntress)",
+      "first_seen": "2026-03-04",
+      "status": "active",
+      "description": "Bing AI search poisoning leading to fake OpenClaw installers distributing GhostSocks and Vidar",
+      "references": []
+    },
+    {
+      "name": "Lazarus XPACK",
+      "first_seen": "2026-02-04",
+      "status": "monitoring",
+      "description": "North Korean APT supply chain attack via npm bigmathutils package",
+      "references": []
+    }
+  ],
+  "c2_ips": [
+    {"ip": "91.92.242.30", "campaign": "ClawHavoc", "first_seen": "2026-01-27", "description": "Primary AMOS C2, 824+ skills"},
+    {"ip": "95.92.242.30", "campaign": "ClawHavoc", "first_seen": "2026-01-27", "description": "Secondary C2"},
+    {"ip": "54.91.154.110", "campaign": "ClawHavoc", "first_seen": "2026-01-28", "description": "Reverse shell backdoor, port 13338"},
+    {"ip": "202.161.50.59", "campaign": "ClawHavoc", "first_seen": "2026-01-28", "description": "Payload staging server"},
+    {"ip": "185.196.9.98", "campaign": "Fake Installer", "first_seen": "2026-03-04", "description": "GhostSocks/PureLogs C2"},
+    {"ip": "45.33.32.100", "campaign": "SANDWORM_MODE", "first_seen": "2026-02-20", "description": "Worm exfil endpoint"},
+    {"ip": "103.224.212.44", "campaign": "SANDWORM_MODE", "first_seen": "2026-02-20", "description": "Secondary C2"},
+    {"ip": "185.29.10.88", "campaign": "Lazarus XPACK", "first_seen": "2026-02-04", "description": "RAT C2 endpoint"}
+  ],
+  "malicious_domains": [
+    {"domain": "glot.io", "context": "Base64-encoded shell script hosting for AMOS delivery"},
+    {"domain": "webhook.site", "context": "Credential exfiltration endpoint"},
+    {"domain": "pipedream.net", "context": "Data exfiltration via serverless functions"},
+    {"domain": "requestbin.com", "context": "Credential capture"},
+    {"domain": "ngrok.io", "context": "Tunneling for C2 and exfiltration"},
+    {"domain": "interact.sh", "context": "OAST tool for out-of-band exfiltration"},
+    {"domain": "install.app-distribution.net", "context": "AMOS installer distribution"},
+    {"domain": "serverconect.cc", "context": "PureLogs C2, port 56001"},
+    {"domain": "moltbook.com", "context": "Agent-to-agent poisoning via AI social network"}
+  ],
+  "malicious_publishers": [
+    {"id": "hightower6eu", "campaign": "ClawHavoc", "skills": 354, "description": "Crypto/finance/social bait skills"},
+    {"id": "sakaen736jih", "campaign": "ClawHavoc", "skills": 199, "description": "Automated mass submission"},
+    {"id": "davidsmorais", "campaign": "ClawHavoc", "skills": null, "description": "Hijacked account (est. 2016)"},
+    {"id": "26medias", "campaign": "ClawHavoc", "skills": 2, "description": "bob-p2p-beta crypto scam"},
+    {"id": "clawdhub1", "campaign": "ToxicSkills", "skills": null, "description": "Typosquat of clawhub"},
+    {"id": "sandworm-npm-actor1", "campaign": "SANDWORM_MODE", "skills": 19, "description": "npm typosquat packages"},
+    {"id": "openclaw-installer", "campaign": "Fake Installer", "skills": null, "description": "Fake GitHub org"},
+    {"id": "install-openclaw", "campaign": "Fake Installer", "skills": null, "description": "Fake GitHub org"},
+    {"id": "lazarus-bigmath", "campaign": "Lazarus XPACK", "skills": null, "description": "North Korean APT"}
+  ],
+  "file_hashes": [
+    {"sha256": "17703b3d5e8e1fe69d6a6c78a240d8c84b32465fe62bed5610fb29335fe42283", "filename": "openclaw-agent.exe", "campaign": "ClawHavoc", "description": "Packed trojan"},
+    {"sha256": "1e6d4b0538558429422b71d1f4d724c8ce31be92d299df33a8339e32316e2298", "filename": "x5ki60w1ih838sp7", "campaign": "ClawHavoc", "description": "AMOS Mach-O universal binary"},
+    {"sha256": "0e52566ccff4830e30ef45d2ad804eefba4ffe42062919398bf1334aab74dd65", "filename": "AMOS variant", "campaign": "ClawHavoc", "description": "AMOS stealer variant"},
+    {"sha256": "518ff5f147860edee7f8d5620f59f3f0b0da6f0167683a62df2851815f8f44a0", "filename": "OpenClaw_x64.exe", "campaign": "Fake Installer", "description": "Multi-stage malware installer"},
+    {"sha256": "f03eb5ee2de5f6f76fd7df9f861247f622755e4f04f8ec8ec03f20a9f2adb5b9", "filename": "cloudvideo.exe", "campaign": "Fake Installer", "description": "Vidar stealer dropper"},
+    {"sha256": "40fcbf9f89f176194f4cc47fca19d27c4ec42f183be4890567c010f8f91a8daa", "filename": "svc_service.exe", "campaign": "Fake Installer", "description": "Rust loader"},
+    {"sha256": "a22ddb4f2c0f57605f86126c87ce88986fdbb3250a4d09f613f4648d6f29281f", "filename": "serverdrive.exe", "campaign": "Fake Installer", "description": "GhostSocks proxy"}
+  ],
+  "malicious_packages": [
+    {"name": "@anthropic/sdk-extra", "registry": "npm", "campaign": "SANDWORM_MODE"},
+    {"name": "@anthropic/cli-tools", "registry": "npm", "campaign": "SANDWORM_MODE"},
+    {"name": "claude-code-utils", "registry": "npm", "campaign": "SANDWORM_MODE"},
+    {"name": "cursor-mcp-bridge", "registry": "npm", "campaign": "SANDWORM_MODE"},
+    {"name": "windsurf-mcp-bridge", "registry": "npm", "campaign": "SANDWORM_MODE"},
+    {"name": "mcp-server-utils", "registry": "npm", "campaign": "SANDWORM_MODE"}
+  ]
+}

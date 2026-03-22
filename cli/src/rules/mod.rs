@@ -3,6 +3,7 @@ pub mod secrets;
 pub mod dependencies;
 pub mod permissions;
 pub mod config;
+pub mod ioc;
 
 use crate::scanner::{FileContext, SkillContext};
 
@@ -60,6 +61,7 @@ pub enum Category {
     Dependencies,
     Permissions,
     Config,
+    Ioc,
 }
 
 impl std::fmt::Display for Category {
@@ -70,6 +72,7 @@ impl std::fmt::Display for Category {
             Category::Dependencies => write!(f, "Dependencies"),
             Category::Permissions => write!(f, "Permissions"),
             Category::Config => write!(f, "Config"),
+            Category::Ioc => write!(f, "IOC"),
         }
     }
 }
@@ -151,6 +154,11 @@ pub fn all_rules() -> Vec<Box<dyn Rule>> {
     rules.push(Box::new(config::MissingVersion));
     rules.push(Box::new(config::MissingPermissions));
     rules.push(Box::new(config::PromptInjectionRisk));
+
+    // IOC (Indicators of Compromise)
+    rules.push(Box::new(ioc::C2IpDetection));
+    rules.push(Box::new(ioc::MaliciousDomainDetection));
+    rules.push(Box::new(ioc::MaliciousPublisherDetection));
 
     rules
 }

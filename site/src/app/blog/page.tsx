@@ -2,6 +2,14 @@ import Link from "next/link";
 
 const posts = [
   {
+    slug: "sandworm-mcp-worm",
+    title: "SANDWORM_MODE: The MCP Worm That Spreads Through npm Typosquats",
+    date: "2026-03-23",
+    description: "19 typosquatted npm packages targeting Claude Code, Cursor, and Windsurf. Injects malicious MCP configs, steals credentials, and self-propagates through Git repos.",
+    tag: "Supply Chain",
+    tagColor: "text-red-400 bg-red-400/10",
+  },
+  {
     slug: "clawhavoc-bob-p2p",
     title: "A Fake Polymarket Skill Stole Solana Wallets: Inside the bob-p2p Attack",
     date: "2026-03-22",
