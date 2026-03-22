@@ -3,34 +3,34 @@ import Link from "next/link";
 const posts = [
   {
     slug: "sandworm-mcp-worm",
-    title: "SANDWORM_MODE: The MCP Worm That Spreads Through npm Typosquats",
+    title: "SANDWORM_MODE：通过 npm 仿冒包传播的 MCP 蠕虫",
     date: "2026-03-23",
-    description: "19 typosquatted npm packages targeting Claude Code, Cursor, and Windsurf. Injects malicious MCP configs, steals credentials, and self-propagates through Git repos.",
-    tag: "Supply Chain",
+    description: "19 个仿冒 npm 包瞄准 Claude Code、Cursor 和 Windsurf 用户，注入恶意 MCP 配置，窃取凭证，并通过 Git 仓库自我传播。",
+    tag: "供应链攻击",
     tagColor: "text-red-400 bg-red-400/10",
   },
   {
     slug: "clawhavoc-bob-p2p",
-    title: "A Fake Polymarket Skill Stole Solana Wallets: Inside the bob-p2p Attack",
+    title: "一个假 Polymarket Skill 如何偷走你的 Solana 钱包",
     date: "2026-03-22",
-    description: "How a ClawHub skill posing as a decentralized API marketplace tricked AI agents into storing private keys in plaintext and purchasing scam tokens.",
-    tag: "Threat Analysis",
+    description: "ClawHub 上伪装成去中心化 API 市场的 Skill，诱导 AI Agent 以明文存储私钥并购买空气币。",
+    tag: "威胁分析",
     tagColor: "text-red-400 bg-red-400/10",
   },
   {
     slug: "clawhavoc-amos",
-    title: "One Actor, 677 Malicious Skills: The AMOS Stealer ClawHub Campaign",
+    title: "一人之力，677 个恶意 Skill：AMOS 窃密木马的 ClawHub 分发链",
     date: "2026-03-22",
-    description: "Deep dive into how a single threat actor weaponized ClawHub to distribute Atomic macOS Stealer to 7,000+ victims in 3 days.",
-    tag: "Malware Analysis",
+    description: "单一攻击者如何在 3 天内通过 ClawHub 向 7,000+ 受害者分发 Atomic macOS Stealer。",
+    tag: "恶意软件分析",
     tagColor: "text-orange-400 bg-orange-400/10",
   },
   {
     slug: "mcp-tool-poisoning",
-    title: "Your MCP Server Is Reading Your SSH Keys: Tool Poisoning in Practice",
+    title: "你的 MCP Server 正在读取你的 SSH Key：Tool Poisoning 实战",
     date: "2026-03-22",
-    description: "Reproducing Invariant Labs' proof-of-concept: how a malicious MCP tool description silently exfiltrates credentials from Claude Desktop and Cursor.",
-    tag: "MCP Security",
+    description: "复现 Invariant Labs 的 PoC：恶意 MCP 工具如何通过 description 注入，从 Claude Desktop 和 Cursor 中窃取凭证。",
+    tag: "MCP 安全",
     tagColor: "text-purple-400 bg-purple-400/10",
   },
 ];
@@ -42,15 +42,16 @@ export default function BlogIndex() {
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="text-xl font-bold hover:text-gray-300 transition">ClawSafety</Link>
           <div className="flex items-center gap-6 text-sm text-gray-400">
-            <Link href="/scan" className="hover:text-white transition">Scan</Link>
-            <Link href="/blog" className="text-white">Blog</Link>
+            <Link href="/scan" className="hover:text-white transition">扫描</Link>
+            <Link href="/blog" className="text-white">博客</Link>
+            <Link href="/en/blog" className="hover:text-white transition">EN</Link>
           </div>
         </div>
       </nav>
 
       <div className="pt-32 pb-20 px-6 max-w-3xl mx-auto">
-        <h1 className="text-4xl font-bold mb-4">Security Research</h1>
-        <p className="text-gray-400 mb-12">Deep dives into real-world Agent Skill attacks and defenses.</p>
+        <h1 className="text-4xl font-bold mb-4">安全研究</h1>
+        <p className="text-gray-400 mb-12">深入分析真实 Agent Skill 攻击事件与防御方案。</p>
 
         <div className="space-y-8">
           {posts.map((post) => (

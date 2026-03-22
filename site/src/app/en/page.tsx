@@ -1,20 +1,19 @@
 import Link from "next/link";
 
 const RULES = [
-  { id: "INJ", name: "注入", count: 4, desc: "Shell 注入、SQL 注入、危险函数调用、反弹 Shell", color: "text-red-400" },
-  { id: "SEC", name: "敏感信息", count: 4, desc: "硬编码密码、API Key、私钥泄露、URL 内嵌凭证", color: "text-orange-400" },
-  { id: "DEP", name: "依赖安全", count: 4, desc: "不安全安装、版本未锁定、已知 CVE、不可信下载", color: "text-yellow-400" },
-  { id: "PRM", name: "权限", count: 4, desc: "权限过度申请、敏感路径访问、环境变量滥用、不安全的文件权限", color: "text-blue-400" },
-  { id: "CFG", name: "配置", count: 4, desc: "缺少 SKILL.md、无版本声明、无权限声明、Prompt 注入风险", color: "text-purple-400" },
-  { id: "IOC", name: "威胁情报", count: 3, desc: "已知 C2 IP 检测、恶意域名检测、恶意发布者检测", color: "text-cyan-400" },
+  { id: "INJ", name: "Injection", count: 4, desc: "Shell injection, SQL injection, dangerous functions, reverse shells", color: "text-red-400" },
+  { id: "SEC", name: "Secrets", count: 4, desc: "Hardcoded passwords, API keys, private keys, URL credentials", color: "text-orange-400" },
+  { id: "DEP", name: "Dependencies", count: 4, desc: "Unsafe installs, unpinned versions, known CVEs, untrusted downloads", color: "text-yellow-400" },
+  { id: "PRM", name: "Permissions", count: 4, desc: "Excessive permissions, sensitive paths, env abuse, insecure chmod", color: "text-blue-400" },
+  { id: "CFG", name: "Config", count: 4, desc: "Missing SKILL.md, no version, no permissions, prompt injection", color: "text-purple-400" },
 ];
 
 const GRADES = [
-  { grade: "A", range: "90-100", color: "bg-green-500", meaning: "优秀" },
-  { grade: "B", range: "75-89", color: "bg-cyan-500", meaning: "良好" },
-  { grade: "C", range: "60-74", color: "bg-yellow-500", meaning: "一般" },
-  { grade: "D", range: "40-59", color: "bg-orange-500", meaning: "较差" },
-  { grade: "F", range: "0-39", color: "bg-red-500", meaning: "危险" },
+  { grade: "A", range: "90-100", color: "bg-green-500", meaning: "Excellent" },
+  { grade: "B", range: "75-89", color: "bg-cyan-500", meaning: "Good" },
+  { grade: "C", range: "60-74", color: "bg-yellow-500", meaning: "Fair" },
+  { grade: "D", range: "40-59", color: "bg-orange-500", meaning: "Poor" },
+  { grade: "F", range: "0-39", color: "bg-red-500", meaning: "Dangerous" },
 ];
 
 export default function Home() {
@@ -23,15 +22,17 @@ export default function Home() {
       {/* Nav */}
       <nav className="fixed top-0 w-full z-50 border-b border-white/10 bg-[#0a0a0a]/80 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold">ClawSafety</Link>
+          <div className="flex items-center gap-2">
+            <span className="text-xl font-bold">ClawSafety</span>
+          </div>
           <div className="flex items-center gap-6 text-sm text-gray-400">
-            <a href="#features" className="hover:text-white transition">功能</a>
-            <a href="#rules" className="hover:text-white transition">规则</a>
-            <Link href="/blog" className="hover:text-white transition">博客</Link>
-            <Link href="/ioc" className="hover:text-white transition">IOC</Link>
-            <Link href="/en" className="hover:text-white transition">EN</Link>
-            <Link href="/scan" className="px-4 py-2 bg-white text-black rounded-lg font-medium hover:bg-gray-200 transition">
-              开始扫描
+            <a href="#features" className="hover:text-white transition">Features</a>
+            <a href="#rules" className="hover:text-white transition">Rules</a>
+            <Link href="/en/blog" className="hover:text-white transition">Blog</Link>
+            <Link href="/en/ioc" className="hover:text-white transition">IOC Feed</Link>
+            <Link href="/" className="hover:text-white transition">中文</Link>
+            <Link href="/en/scan" className="px-4 py-2 bg-white text-black rounded-lg font-medium hover:bg-gray-200 transition">
+              Scan Now
             </Link>
           </div>
         </div>
@@ -41,24 +42,25 @@ export default function Home() {
       <section className="pt-32 pb-20 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-block mb-6 px-4 py-1.5 rounded-full border border-red-500/30 bg-red-500/10 text-red-400 text-sm font-medium">
-            ClawHavoc 事件：341 个恶意 Skill 入侵 9,000+ 安装实例
+            ClawHavoc: 341 malicious skills compromised 9,000+ installations
           </div>
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6">
-            Agent Skill
+            Security Scanner for
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-              安全扫描器
+              Agent Skills
             </span>
           </h1>
           <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
-            扫描 OpenClaw Skill 中的漏洞、硬编码密钥、供应链风险等安全问题。23 条规则，A-F 评分，一行命令。
+            Scan OpenClaw Skills for vulnerabilities, hardcoded secrets, supply chain risks, and more.
+            20 rules. A-F grading. One command.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/scan"
+              href="/en/scan"
               className="px-8 py-3 bg-white text-black rounded-lg font-semibold text-lg hover:bg-gray-200 transition"
             >
-              扫描 Skill
+              Scan a Skill
             </Link>
             <a
               href="https://github.com/relaxcloud-cn/clawsafety"
@@ -87,19 +89,19 @@ export default function Home() {
   Scanning: ./my-skill/
   Findings: 3
 
-  `}<span className="text-red-400">CRITICAL</span>{`  CS-SEC-002  检测到硬编码 API Key
+  `}<span className="text-red-400">CRITICAL</span>{`  CS-SEC-002  Hardcoded API Key detected
             scripts/config.py:12
             > api_key = "sk-proj-abc123..."
 
-  `}<span className="text-yellow-400">HIGH</span>{`      CS-INJ-001  Shell 命令注入
+  `}<span className="text-yellow-400">HIGH</span>{`      CS-INJ-001  Shell command injection
             scripts/run.sh:45
             > eval $USER_INPUT
 
-  `}<span className="text-yellow-300">MEDIUM</span>{`    CS-DEP-002  依赖版本未锁定
+  `}<span className="text-yellow-300">MEDIUM</span>{`    CS-DEP-002  Unpinned dependency
             skill.yaml:8
             > requests>=2.0
 
-  评分: `}<span className="text-orange-400">52/100 (D)</span>{`
+  Score: `}<span className="text-orange-400">52/100 (D)</span>{`
   Critical: 1 | High: 1 | Medium: 1`}
                 </code>
               </pre>
@@ -111,11 +113,23 @@ export default function Home() {
       {/* Features */}
       <section id="features" className="py-20 px-6 border-t border-white/5">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-16">工作流程</h2>
+          <h2 className="text-3xl font-bold text-center mb-16">How it works</h2>
           <div className="grid md:grid-cols-3 gap-8">
-            <FeatureCard step="1" title="粘贴 URL" desc="输入任意 GitHub Skill 仓库地址，无需登录。" />
-            <FeatureCard step="2" title="自动扫描" desc="23 条规则检测注入、密钥泄露、依赖风险、权限问题和威胁情报。" />
-            <FeatureCard step="3" title="获取评分" desc="A-F 安全评分 + 详细发现列表 + 修复建议。" />
+            <FeatureCard
+              step="1"
+              title="Paste a URL"
+              desc="Enter any GitHub skill repository URL. No login required."
+            />
+            <FeatureCard
+              step="2"
+              title="Automatic scan"
+              desc="20 rules check for injection, secrets, dependencies, permissions, and config issues."
+            />
+            <FeatureCard
+              step="3"
+              title="Get your grade"
+              desc="A-F security score with detailed findings and fix suggestions."
+            />
           </div>
         </div>
       </section>
@@ -123,8 +137,8 @@ export default function Home() {
       {/* Rules */}
       <section id="rules" className="py-20 px-6 border-t border-white/5">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-4">23 条安全规则</h2>
-          <p className="text-center text-gray-400 mb-12">6 大类别，覆盖 Agent Skill 完整攻击面</p>
+          <h2 className="text-3xl font-bold text-center mb-4">20 Security Rules</h2>
+          <p className="text-center text-gray-400 mb-12">5 categories covering the full Agent Skill attack surface</p>
           <div className="space-y-4">
             {RULES.map((r) => (
               <div key={r.id} className="p-5 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] transition">
@@ -133,7 +147,7 @@ export default function Home() {
                     <span className={`font-mono font-bold ${r.color}`}>{r.id}</span>
                     <span className="font-semibold">{r.name}</span>
                   </div>
-                  <span className="text-sm text-gray-500">{r.count} 条规则</span>
+                  <span className="text-sm text-gray-500">{r.count} rules</span>
                 </div>
                 <p className="text-sm text-gray-400">{r.desc}</p>
               </div>
@@ -145,7 +159,7 @@ export default function Home() {
       {/* Grading */}
       <section className="py-20 px-6 border-t border-white/5">
         <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-12">安全评分体系</h2>
+          <h2 className="text-3xl font-bold mb-12">Security Grading</h2>
           <div className="flex justify-center gap-4">
             {GRADES.map((g) => (
               <div key={g.grade} className="text-center">
@@ -163,11 +177,14 @@ export default function Home() {
       {/* CTA */}
       <section className="py-20 px-6 border-t border-white/5">
         <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4">保护你的 Skill 安全</h2>
-          <p className="text-gray-400 mb-8">公开仓库免费扫描，无需登录。</p>
+          <h2 className="text-3xl font-bold mb-4">Secure your skills today</h2>
+          <p className="text-gray-400 mb-8">Free for public repositories. No login required.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/scan" className="px-8 py-3 bg-white text-black rounded-lg font-semibold hover:bg-gray-200 transition">
-              开始扫描
+            <Link
+              href="/en/scan"
+              className="px-8 py-3 bg-white text-black rounded-lg font-semibold hover:bg-gray-200 transition"
+            >
+              Scan Now
             </Link>
             <div className="px-6 py-3 rounded-lg border border-white/10 font-mono text-sm bg-white/5">
               cargo install clawsafety
@@ -179,11 +196,11 @@ export default function Home() {
       {/* Footer */}
       <footer className="py-8 px-6 border-t border-white/5 text-center text-sm text-gray-500">
         <p>
-          由{" "}
+          Built by{" "}
           <a href="https://yisec.ai" className="text-gray-400 hover:text-white transition" target="_blank">
-            弈安科技 YiSec
+            YiSec
           </a>{" "}
-          出品 &mdash; AI 原生安全，Agent-Native 架构先行者。
+          &mdash; AI-native security, Agent-Native architecture.
         </p>
       </footer>
     </main>

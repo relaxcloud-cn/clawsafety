@@ -1,23 +1,23 @@
 import Link from "next/link";
-import iocData from "../../../public/ioc-feed.json";
+import iocData from "../../../../public/ioc-feed.json";
 
 export default function IOCFeed() {
   return (
     <main className="min-h-screen">
       <nav className="fixed top-0 w-full z-50 border-b border-white/10 bg-[#0a0a0a]/80 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold hover:text-gray-300 transition">ClawSafety</Link>
+          <Link href="/en" className="text-xl font-bold hover:text-gray-300 transition">ClawSafety</Link>
           <div className="flex items-center gap-6 text-sm text-gray-400">
-            <Link href="/blog" className="hover:text-white transition">博客</Link>
-            <Link href="/scan" className="hover:text-white transition">扫描</Link>
-            <Link href="/en/ioc" className="hover:text-white transition">EN</Link>
+            <Link href="/en/blog" className="hover:text-white transition">Blog</Link>
+            <Link href="/en/scan" className="hover:text-white transition">Scan</Link>
+            <Link href="/ioc" className="hover:text-white transition">中文</Link>
           </div>
         </div>
       </nav>
 
       <div className="pt-32 pb-20 px-6 max-w-4xl mx-auto">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="text-4xl font-bold">威胁情报 IOC</h1>
+          <h1 className="text-4xl font-bold">IOC Feed</h1>
           <a
             href="/ioc-feed.json"
             className="px-4 py-2 rounded-lg border border-white/10 bg-white/5 text-sm font-mono hover:bg-white/10 transition"
@@ -26,13 +26,13 @@ export default function IOCFeed() {
           </a>
         </div>
         <p className="text-gray-400 mb-2">
-          Agent Skill 供应链攻击威胁指标（IOC），更新日期：{iocData.updated}
+          Indicators of Compromise from Agent Skill supply chain attacks. Updated: {iocData.updated}
         </p>
-        <p className="text-xs text-gray-500 mb-12">许可证：CC BY 4.0 &mdash; 署名即可免费使用。</p>
+        <p className="text-xs text-gray-500 mb-12">License: CC BY 4.0 &mdash; free to use with attribution.</p>
 
         {/* Campaigns */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-6">活跃攻击活动</h2>
+          <h2 className="text-2xl font-bold mb-6">Active Campaigns</h2>
           <div className="space-y-4">
             {iocData.campaigns.map((c) => (
               <div key={c.name} className="p-4 rounded-xl border border-white/10 bg-white/[0.02]">
@@ -51,7 +51,7 @@ export default function IOCFeed() {
 
         {/* C2 IPs */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-6">C2 服务器 IP ({iocData.c2_ips.length})</h2>
+          <h2 className="text-2xl font-bold mb-6">C2 IP Addresses ({iocData.c2_ips.length})</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead><tr className="border-b border-white/10">
@@ -76,7 +76,7 @@ export default function IOCFeed() {
 
         {/* Malicious Domains */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-6">恶意域名 ({iocData.malicious_domains.length})</h2>
+          <h2 className="text-2xl font-bold mb-6">Malicious Domains ({iocData.malicious_domains.length})</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead><tr className="border-b border-white/10">
@@ -97,7 +97,7 @@ export default function IOCFeed() {
 
         {/* File Hashes */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-6">文件哈希 ({iocData.file_hashes.length})</h2>
+          <h2 className="text-2xl font-bold mb-6">File Hashes ({iocData.file_hashes.length})</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead><tr className="border-b border-white/10">
@@ -120,7 +120,7 @@ export default function IOCFeed() {
 
         {/* Malicious Publishers */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-6">恶意发布者 ({iocData.malicious_publishers.length})</h2>
+          <h2 className="text-2xl font-bold mb-6">Malicious Publishers ({iocData.malicious_publishers.length})</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead><tr className="border-b border-white/10">
@@ -145,7 +145,7 @@ export default function IOCFeed() {
 
         {/* Malicious Packages */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-6">恶意软件包 ({iocData.malicious_packages.length})</h2>
+          <h2 className="text-2xl font-bold mb-6">Malicious Packages ({iocData.malicious_packages.length})</h2>
           <div className="flex flex-wrap gap-2">
             {iocData.malicious_packages.map((p) => (
               <span key={p.name} className="px-3 py-1.5 rounded-lg border border-red-500/20 bg-red-500/5 text-red-400 font-mono text-xs">
@@ -156,9 +156,9 @@ export default function IOCFeed() {
         </section>
 
         <div className="p-6 rounded-xl border border-white/10 bg-white/[0.02] text-center">
-          <p className="font-semibold mb-2">将 IOC 数据集成到你的安全流水线</p>
+          <p className="font-semibold mb-2">Integrate IOC data into your pipeline</p>
           <p className="text-sm text-gray-400 mb-4">
-            机器可读 JSON 数据源：<code className="text-cyan-400">/ioc-feed.json</code>
+            Machine-readable JSON feed available at <code className="text-cyan-400">/ioc-feed.json</code>
           </p>
           <code className="text-xs text-gray-500 font-mono">
             curl https://clawsafety.yisec.ai/ioc-feed.json

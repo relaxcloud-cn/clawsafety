@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ClawSafety - Agent Skill Security Scanner",
-  description: "Protect the Agent-Native ecosystem. Scan OpenClaw Skills for vulnerabilities, hardcoded secrets, and supply chain risks.",
+  title: "ClawSafety - Agent Skill 安全扫描器",
+  description: "保护 Agent-Native 生态安全。扫描 OpenClaw Skill 中的漏洞、硬编码密钥和供应链风险。",
 };
 
 export default function RootLayout({
@@ -23,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="zh-CN" className="dark">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
       </body>
