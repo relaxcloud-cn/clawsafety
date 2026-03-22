@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ClawSafety - Security Scanner for Agent Skills</title>
+  <meta name="description" content="The npm audit for Agent Skills. Scan OpenClaw Skills for vulnerabilities, secrets, injection, and supply chain risks." />
+  <meta property="og:title" content="ClawSafety - Security Scanner for Agent Skills" />
+  <meta property="og:description" content="The npm audit for Agent Skills. Protect the Agent-Native ecosystem." />
+  <meta property="og:url" content="https://clawsafety.yisec.ai" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="ClawSafety - Security Scanner for Agent Skills" />
+  <meta name="twitter:description" content="The npm audit for Agent Skills." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+    body { background: #09090b; color: #fafafa; }
+    .gradient-hero {
+      background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(16, 185, 129, 0.15), transparent);
+    }
+    .text-gradient {
+      background: linear-gradient(135deg, #10b981, #34d399);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .grid-pattern {
+      background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 64px 64px;
+    }
+    .terminal {
+      background: #0a0a0a;
+      border: 1px solid rgba(255,255,255,0.1);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .terminal-header {
+      background: rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .score-bar { transition: width 1.5s ease-out; }
+  </style>
+</head>
+<body class="antialiased">
+  <!-- Header -->
+  <header class="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-black/80 backdrop-blur-xl">
+    <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
+      <a class="flex items-center gap-2" href="/">
+        <svg width="32" height="32" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M32 4L58 18V46L32 60L6 46V18L32 4Z" fill="url(#shieldGrad)" opacity="0.9"/>
+          <path d="M32 14L48 22V38L32 46L16 38V22L32 14Z" fill="url(#shieldGrad2)"/>
+          <path d="M26 30L30 34L38 26" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs>
+            <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#10b981"/>
+              <stop offset="100%" stop-color="#059669"/>
+            </linearGradient>
+            <linearGradient id="shieldGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#059669"/>
+              <stop offset="100%" stop-color="#047857"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="text-lg font-bold">ClawSafety</span>
+      </a>
+      <div class="hidden lg:flex lg:gap-x-8">
+        <a class="text-sm text-zinc-400 transition hover:text-white" href="#features">Features</a>
+        <a class="text-sm text-zinc-400 transition hover:text-white" href="#scoring">Scoring</a>
+        <a class="text-sm text-zinc-400 transition hover:text-white" href="#roadmap">Roadmap</a>
+        <a class="text-sm text-zinc-400 transition hover:text-white" href="https://github.com/yisec-ai/clawsafety">GitHub</a>
+      </div>
+      <a class="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-emerald-500" href="https://github.com/yisec-ai/clawsafety">
+        Get Started
+      </a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="gradient-hero grid-pattern relative pt-32 pb-20 lg:pt-44 lg:pb-32">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="mx-auto max-w-3xl text-center">
+        <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-sm text-zinc-400">
+          <span class="flex h-2 w-2 rounded-full bg-emerald-500"></span>
+          v0.1 - CLI Scanner with 20 Rules
+        </div>
+        <h1 class="mt-8 text-4xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl">
+          <span class="text-gradient">npm audit</span><br/>
+          <span class="text-white">for Agent Skills</span>
+        </h1>
+        <p class="mt-6 text-lg text-zinc-400 lg:text-xl">
+          Scan OpenClaw Skills for vulnerabilities, hardcoded secrets, command injection, and supply chain risks. Protect the Agent-Native ecosystem.
+        </p>
+        <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a class="flex items-center gap-2 rounded-lg bg-emerald-600 px-6 py-3 text-sm font-medium text-white transition hover:bg-emerald-500" href="https://github.com/yisec-ai/clawsafety">
+            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4M9 18c-4.51 2-5-2-7-2"/></svg>
+            View on GitHub
+          </a>
+          <a class="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-6 py-3 text-sm font-medium transition hover:bg-white/10" href="#demo">
+            See it in action
+          </a>
+        </div>
+      </div>
+
+      <!-- Terminal Demo -->
+      <div id="demo" class="mx-auto mt-16 max-w-3xl">
+        <div class="terminal rounded-xl overflow-hidden shadow-2xl shadow-emerald-500/5">
+          <div class="terminal-header flex items-center gap-2 px-4 py-3">
+            <div class="dot bg-red-500/80"></div>
+            <div class="dot bg-yellow-500/80"></div>
+            <div class="dot bg-green-500/80"></div>
+            <span class="ml-2 text-xs text-zinc-500">Terminal</span>
+          </div>
+          <div class="p-6 text-sm leading-relaxed">
+            <div class="text-zinc-500">$ <span class="text-emerald-400">clawsafety</span> scan ./my-skill/</div>
+            <div class="mt-4 text-zinc-400">
+              <span class="text-emerald-400">Scanning</span> ./my-skill/ ...
+            </div>
+            <div class="mt-3 space-y-1.5">
+              <div><span class="text-red-400 font-medium">CRITICAL</span> <span class="text-zinc-500">[INJ-001]</span> Shell injection via unsanitized input <span class="text-zinc-600">scripts/install.sh:14</span></div>
+              <div><span class="text-red-400 font-medium">HIGH</span> <span class="text-zinc-500">[SEC-002]</span> Hardcoded API key detected <span class="text-zinc-600">config.yaml:8</span></div>
+              <div><span class="text-yellow-400 font-medium">MEDIUM</span> <span class="text-zinc-500">[DEP-001]</span> Unpinned dependency version <span class="text-zinc-600">SKILL.md:12</span></div>
+              <div><span class="text-blue-400 font-medium">LOW</span> <span class="text-zinc-500">[CFG-003]</span> Missing license field <span class="text-zinc-600">SKILL.md</span></div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-white/5">
+              <div class="flex items-center gap-3">
+                <span class="text-zinc-400">Security Score:</span>
+                <span class="text-2xl font-bold text-red-400">35</span>
+                <span class="text-zinc-600">/100</span>
+                <span class="rounded px-2 py-0.5 text-xs font-medium bg-red-500/20 text-red-400">Grade F</span>
+              </div>
+              <div class="mt-2 flex items-center gap-2">
+                <span class="text-zinc-500 text-xs">1 critical, 1 high, 1 medium, 1 low</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why ClawSafety -->
+  <section class="border-t border-white/5 bg-zinc-950/50 py-20 lg:py-28">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="text-sm font-medium text-emerald-500">Why ClawSafety</p>
+        <h2 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">Agent Skills are the new attack surface</h2>
+        <p class="mt-4 text-lg text-zinc-400">
+          The ClawHavoc incident (Jan 2026) proved it: 341 malicious skills compromised 9,000+ installations. A Snyk audit found 47% of ClawHub skills had at least one security issue.
+        </p>
+      </div>
+      <div class="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="rounded-xl border border-white/5 bg-white/[0.02] p-6 text-center">
+          <div class="text-3xl font-bold text-red-400">341</div>
+          <div class="mt-1 text-sm text-zinc-500">Malicious skills found</div>
+        </div>
+        <div class="rounded-xl border border-white/5 bg-white/[0.02] p-6 text-center">
+          <div class="text-3xl font-bold text-red-400">9,000+</div>
+          <div class="mt-1 text-sm text-zinc-500">Installations compromised</div>
+        </div>
+        <div class="rounded-xl border border-white/5 bg-white/[0.02] p-6 text-center">
+          <div class="text-3xl font-bold text-yellow-400">47%</div>
+          <div class="mt-1 text-sm text-zinc-500">Skills with issues</div>
+        </div>
+        <div class="rounded-xl border border-white/5 bg-white/[0.02] p-6 text-center">
+          <div class="text-3xl font-bold text-emerald-400">20</div>
+          <div class="mt-1 text-sm text-zinc-500">Security rules in v0.1</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="py-20 lg:py-28">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="text-sm font-medium text-emerald-500">What It Scans</p>
+        <h2 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">Comprehensive security analysis</h2>
+      </div>
+      <div class="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <!-- INJ -->
+        <div class="group rounded-2xl border border-white/5 bg-white/[0.02] p-8 transition hover:border-emerald-500/20 hover:bg-white/[0.04]">
+          <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-red-500/10 text-red-500">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 15.75h.007v.008H12v-.008z"/></svg>
+          </div>
+          <h3 class="mt-4 text-lg font-semibold">Injection (INJ)</h3>
+          <p class="mt-2 text-sm text-zinc-400">Shell injection, SQL injection, reverse shells, command execution via unsanitized inputs.</p>
+          <div class="mt-4 text-xs text-zinc-600">4 rules</div>
+        </div>
+        <!-- SEC -->
+        <div class="group rounded-2xl border border-white/5 bg-white/[0.02] p-8 transition hover:border-emerald-500/20 hover:bg-white/[0.04]">
+          <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-yellow-500/10 text-yellow-500">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"/></svg>
+          </div>
+          <h3 class="mt-4 text-lg font-semibold">Secrets (SEC)</h3>
+          <p class="mt-2 text-sm text-zinc-400">Hardcoded passwords, API keys, private keys, tokens left in skill configurations.</p>
+          <div class="mt-4 text-xs text-zinc-600">4 rules</div>
+        </div>
+        <!-- DEP -->
+        <div class="group rounded-2xl border border-white/5 bg-white/[0.02] p-8 transition hover:border-emerald-500/20 hover:bg-white/[0.04]">
+          <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-orange-500/10 text-orange-500">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/></svg>
+          </div>
+          <h3 class="mt-4 text-lg font-semibold">Dependencies (DEP)</h3>
+          <p class="mt-2 text-sm text-zinc-400">Unpinned versions, known CVEs, curl-pipe-bash patterns, suspicious package sources.</p>
+          <div class="mt-4 text-xs text-zinc-600">4 rules</div>
+        </div>
+        <!-- PRM -->
+        <div class="group rounded-2xl border border-white/5 bg-white/[0.02] p-8 transition hover:border-emerald-500/20 hover:bg-white/[0.04]">
+          <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/10 text-purple-500">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
+          </div>
+          <h3 class="mt-4 text-lg font-semibold">Permissions (PRM)</h3>
+          <p class="mt-2 text-sm text-zinc-400">Excessive file access, sensitive path reads, environment variable abuse, privilege escalation.</p>
+          <div class="mt-4 text-xs text-zinc-600">4 rules</div>
+        </div>
+        <!-- CFG -->
+        <div class="group rounded-2xl border border-white/5 bg-white/[0.02] p-8 transition hover:border-emerald-500/20 hover:bg-white/[0.04]">
+          <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          </div>
+          <h3 class="mt-4 text-lg font-semibold">Config (CFG)</h3>
+          <p class="mt-2 text-sm text-zinc-400">Missing SKILL.md, prompt injection risks, insecure default configurations.</p>
+          <div class="mt-4 text-xs text-zinc-600">4 rules</div>
+        </div>
+        <!-- GitHub -->
+        <div class="group rounded-2xl border border-white/5 bg-white/[0.02] p-8 transition hover:border-emerald-500/20 hover:bg-white/[0.04]">
+          <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-500">
+            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4M9 18c-4.51 2-5-2-7-2"/></svg>
+          </div>
+          <h3 class="mt-4 text-lg font-semibold">GitHub Integration</h3>
+          <p class="mt-2 text-sm text-zinc-400">Automated scanning on every push and PR. Results as comments and GitHub Check Runs.</p>
+          <div class="mt-4 text-xs text-zinc-600">Coming in v0.2</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scoring -->
+  <section id="scoring" class="border-t border-white/5 bg-zinc-950/50 py-20 lg:py-28">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="text-sm font-medium text-emerald-500">Security Score</p>
+        <h2 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">Every skill gets a grade</h2>
+        <p class="mt-4 text-lg text-zinc-400">A score from 0-100 with a clear, actionable grade.</p>
+      </div>
+      <div class="mx-auto mt-12 max-w-xl space-y-4">
+        <div class="flex items-center gap-4 rounded-lg border border-white/5 bg-white/[0.02] px-6 py-4">
+          <span class="w-8 text-lg font-bold text-emerald-400">A</span>
+          <div class="flex-1">
+            <div class="h-2 w-full rounded-full bg-white/5"><div class="h-2 rounded-full bg-emerald-500" style="width:95%"></div></div>
+          </div>
+          <span class="text-sm text-zinc-400 w-16">90-100</span>
+          <span class="text-xs text-zinc-500 w-32">Excellent</span>
+        </div>
+        <div class="flex items-center gap-4 rounded-lg border border-white/5 bg-white/[0.02] px-6 py-4">
+          <span class="w-8 text-lg font-bold text-blue-400">B</span>
+          <div class="flex-1">
+            <div class="h-2 w-full rounded-full bg-white/5"><div class="h-2 rounded-full bg-blue-500" style="width:82%"></div></div>
+          </div>
+          <span class="text-sm text-zinc-400 w-16">75-89</span>
+          <span class="text-xs text-zinc-500 w-32">Good</span>
+        </div>
+        <div class="flex items-center gap-4 rounded-lg border border-white/5 bg-white/[0.02] px-6 py-4">
+          <span class="w-8 text-lg font-bold text-yellow-400">C</span>
+          <div class="flex-1">
+            <div class="h-2 w-full rounded-full bg-white/5"><div class="h-2 rounded-full bg-yellow-500" style="width:67%"></div></div>
+          </div>
+          <span class="text-sm text-zinc-400 w-16">60-74</span>
+          <span class="text-xs text-zinc-500 w-32">Needs attention</span>
+        </div>
+        <div class="flex items-center gap-4 rounded-lg border border-white/5 bg-white/[0.02] px-6 py-4">
+          <span class="w-8 text-lg font-bold text-orange-400">D</span>
+          <div class="flex-1">
+            <div class="h-2 w-full rounded-full bg-white/5"><div class="h-2 rounded-full bg-orange-500" style="width:50%"></div></div>
+          </div>
+          <span class="text-sm text-zinc-400 w-16">40-59</span>
+          <span class="text-xs text-zinc-500 w-32">High-risk issues</span>
+        </div>
+        <div class="flex items-center gap-4 rounded-lg border border-white/5 bg-white/[0.02] px-6 py-4">
+          <span class="w-8 text-lg font-bold text-red-400">F</span>
+          <div class="flex-1">
+            <div class="h-2 w-full rounded-full bg-white/5"><div class="h-2 rounded-full bg-red-500" style="width:25%"></div></div>
+          </div>
+          <span class="text-sm text-zinc-400 w-16">0-39</span>
+          <span class="text-xs text-zinc-500 w-32">Dangerous</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Start -->
+  <section class="py-20 lg:py-28">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="text-sm font-medium text-emerald-500">Quick Start</p>
+        <h2 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">Start scanning in seconds</h2>
+      </div>
+      <div class="mx-auto mt-12 max-w-2xl">
+        <div class="terminal rounded-xl overflow-hidden">
+          <div class="terminal-header flex items-center gap-2 px-4 py-3">
+            <div class="dot bg-red-500/80"></div>
+            <div class="dot bg-yellow-500/80"></div>
+            <div class="dot bg-green-500/80"></div>
+          </div>
+          <div class="p-6 text-sm space-y-3">
+            <div><span class="text-zinc-500"># Install</span></div>
+            <div class="text-zinc-400">$ <span class="text-emerald-400">cargo install</span> clawsafety</div>
+            <div class="mt-4"><span class="text-zinc-500"># Scan a single skill</span></div>
+            <div class="text-zinc-400">$ <span class="text-emerald-400">clawsafety scan</span> ./my-skill/</div>
+            <div class="mt-4"><span class="text-zinc-500"># Scan all skills in a directory</span></div>
+            <div class="text-zinc-400">$ <span class="text-emerald-400">clawsafety scan-all</span> ./skills/</div>
+            <div class="mt-4"><span class="text-zinc-500"># Output as JSON for CI/CD</span></div>
+            <div class="text-zinc-400">$ <span class="text-emerald-400">clawsafety scan</span> ./my-skill/ <span class="text-zinc-600">--format json</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Roadmap -->
+  <section id="roadmap" class="border-t border-white/5 bg-zinc-950/50 py-20 lg:py-28">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="text-sm font-medium text-emerald-500">Roadmap</p>
+        <h2 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">What's coming next</h2>
+      </div>
+      <div class="mx-auto mt-12 max-w-2xl space-y-6">
+        <div class="flex items-start gap-4">
+          <div class="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+          </div>
+          <div>
+            <h3 class="font-semibold">v0.1 - CLI Scanner <span class="text-xs text-emerald-400 ml-2">Current</span></h3>
+            <p class="mt-1 text-sm text-zinc-500">20 security rules, scoring system, JSON output, multi-format reports.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/5 text-zinc-500">
+            <span class="text-xs font-bold">2</span>
+          </div>
+          <div>
+            <h3 class="font-semibold text-zinc-300">v0.2 - GitHub App + Web Dashboard</h3>
+            <p class="mt-1 text-sm text-zinc-500">Automated PR scanning, web dashboard, team collaboration.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/5 text-zinc-500">
+            <span class="text-xs font-bold">3</span>
+          </div>
+          <div>
+            <h3 class="font-semibold text-zinc-300">v0.3 - Auto-fix PRs + Public URL Scanning</h3>
+            <p class="mt-1 text-sm text-zinc-500">Automated remediation, scan skills by URL, public skill registry integration.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/5 text-zinc-500">
+            <span class="text-xs font-bold">4</span>
+          </div>
+          <div>
+            <h3 class="font-semibold text-zinc-300">v1.0 - Enterprise</h3>
+            <p class="mt-1 text-sm text-zinc-500">Team management, runtime monitoring, SBOM generation, policy engine.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-20 lg:py-28">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="mx-auto max-w-2xl text-center">
+        <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">Secure your Agent Skills today</h2>
+        <p class="mt-4 text-lg text-zinc-400">Open source. Free forever for individuals.</p>
+        <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a class="flex items-center gap-2 rounded-lg bg-emerald-600 px-8 py-3 text-sm font-medium text-white transition hover:bg-emerald-500" href="https://github.com/yisec-ai/clawsafety">
+            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4M9 18c-4.51 2-5-2-7-2"/></svg>
+            Star on GitHub
+          </a>
+          <a class="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-8 py-3 text-sm font-medium transition hover:bg-white/10" href="mailto:support@yisec.ai">
+            Contact Sales
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/5 bg-black">
+    <div class="mx-auto max-w-7xl px-6 py-12 lg:px-8">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-4">
+          <a class="flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-300" href="https://yisec.ai">
+            Built by YiSec
+          </a>
+          <span class="text-zinc-700">|</span>
+          <a class="text-sm text-zinc-500 hover:text-zinc-300" href="https://github.com/yisec-ai/clawsafety">GitHub</a>
+        </div>
+        <p class="text-xs text-zinc-600">&copy; 2026 YiSec. Apache-2.0 License.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
