@@ -28,6 +28,7 @@ export default function Home() {
           <div className="flex items-center gap-6 text-sm text-gray-400">
             <a href="#features" className="hover:text-white transition">Features</a>
             <a href="#rules" className="hover:text-white transition">Rules</a>
+            <Link href="/blog" className="hover:text-white transition">Blog</Link>
             <Link href="/scan" className="px-4 py-2 bg-white text-black rounded-lg font-medium hover:bg-gray-200 transition">
               Scan Now
             </Link>
