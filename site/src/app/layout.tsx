@@ -1,20 +1,30 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Chakra_Petch, DM_Sans, IBM_Plex_Mono } from "next/font/google";
+
+import { SiteShell } from "@/components/site-shell";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const bodySans = DM_Sans({
+  variable: "--font-body",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const displaySans = Chakra_Petch({
+  variable: "--font-display",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const bodyMono = IBM_Plex_Mono({
+  variable: "--font-mono",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
-  title: "ClawSafety - Agent Skill 安全扫描器",
-  description: "保护 Agent-Native 生态安全。扫描 OpenClaw Skill 中的漏洞、硬编码密钥和供应链风险。",
+  title: "ClawSafety Registry",
+  description:
+    "VirusTotal-inspired search and SkillSafe-style verified distribution for Agent Skills, built on ClawSafety's scanner.",
 };
 
 export default function RootLayout({
@@ -24,8 +34,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN" className="dark">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {children}
+      <body
+        className={`${bodySans.variable} ${displaySans.variable} ${bodyMono.variable} antialiased`}
+      >
+        <SiteShell>{children}</SiteShell>
       </body>
     </html>
   );

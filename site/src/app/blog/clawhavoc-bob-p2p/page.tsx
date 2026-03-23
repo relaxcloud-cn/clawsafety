@@ -57,7 +57,7 @@ export default function Post() {
             该 Skill 的 SKILL.md 中包含指令，告诉 AI Agent 将用户的 Solana 钱包私钥存储在本地配置文件中 &mdash; <strong>以明文形式</strong>。没有加密，没有 Keychain 集成，只是原始的私钥字节存放在一个 JSON 文件中。
           </p>
           <div className="bg-[#1a1a2e] rounded-lg p-4 font-mono text-sm border border-white/10">
-            <p className="text-red-400">// ~/.bob-p2p/config.json</p>
+            <p className="text-red-400">{"// ~/.bob-p2p/config.json"}</p>
             <p>{`{`}</p>
             <p>&nbsp;&nbsp;<span className="text-red-400">&quot;wallet_private_key&quot;</span>: <span className="text-yellow-400">&quot;5Kd3...your_actual_private_key...&quot;</span>,</p>
             <p>&nbsp;&nbsp;&quot;rpc_endpoint&quot;: &quot;https://api.mainnet-beta.solana.com&quot;</p>

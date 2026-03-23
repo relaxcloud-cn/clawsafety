@@ -57,7 +57,7 @@ export default function Post() {
             The skill&apos;s SKILL.md contained instructions that told the AI agent to store the user&apos;s Solana wallet private key in a local configuration file &mdash; <strong>in plaintext</strong>. No encryption. No keychain integration. Just raw private key bytes sitting in a JSON file.
           </p>
           <div className="bg-[#1a1a2e] rounded-lg p-4 font-mono text-sm border border-white/10">
-            <p className="text-red-400">// ~/.bob-p2p/config.json</p>
+            <p className="text-red-400">{"// ~/.bob-p2p/config.json"}</p>
             <p>{`{`}</p>
             <p>&nbsp;&nbsp;<span className="text-red-400">&quot;wallet_private_key&quot;</span>: <span className="text-yellow-400">&quot;5Kd3...your_actual_private_key...&quot;</span>,</p>
             <p>&nbsp;&nbsp;&quot;rpc_endpoint&quot;: &quot;https://api.mainnet-beta.solana.com&quot;</p>

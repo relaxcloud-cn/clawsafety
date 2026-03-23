@@ -1,314 +1,237 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function Home() {
-  const [url, setUrl] = useState("");
+import { CopyCommand } from "@/components/copy-command";
+import { SkillCard } from "@/components/skill-card";
+import {
+  compatibleTools,
+  homeStats,
+  registrySkills,
+  trustPrograms,
+  verificationModes,
+} from "@/lib/registry";
+
+const HERO_TABS = [
+  { id: "url", label: "URL" },
+  { id: "skill", label: "技能" },
+  { id: "search", label: "搜索" },
+] as const;
+
+export default function HomePage() {
+  const router = useRouter();
+  const [mode, setMode] = useState<(typeof HERO_TABS)[number]["id"]>("search");
+  const [query, setQuery] = useState("");
+
+  const runSearch = () => {
+    if (!query.trim()) {
+      return;
+    }
+
+    router.push(`/scan?q=${encodeURIComponent(query.trim())}&mode=${mode}`);
+  };
 
   return (
-    <main className="min-h-screen" style={{ background: "#131320" }}>
-      {/* Nav */}
-      <nav className="fixed top-0 w-full z-50" style={{ background: "rgba(19,19,32,0.92)", backdropFilter: "blur(12px)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        <div className="max-w-[1300px] mx-auto px-6 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-md flex items-center justify-center text-xs font-bold text-white" style={{ background: "#394EFF" }}>CS</div>
-            <span className="font-semibold text-[15px] tracking-tight">ClawSafe</span>
-          </Link>
-          <div className="flex items-center gap-5 text-[13px]" style={{ color: "#8888a0" }}>
-            <Link href="/scan" className="hover:text-white transition">Scan</Link>
-            <Link href="/blog" className="hover:text-white transition">Research</Link>
-            <Link href="/ioc" className="hover:text-white transition">IOC Feed</Link>
-            <a href="https://github.com/relaxcloud-cn/clawsafety" target="_blank" className="hover:text-white transition">GitHub</a>
-            <Link href="/en" className="hover:text-white transition">EN</Link>
-          </div>
+    <div className="page-hero">
+      <section className="container home-hero">
+        <div className="hero-logo-stack">
+          <span className="brand-mark" aria-hidden="true">
+            <span />
+          </span>
+          <div className="hero-wordmark">CLAWSAFETY</div>
         </div>
-      </nav>
 
-      {/* Hero — VT style: centered, minimal */}
-      <section className="pt-28 pb-8 px-6">
-        <div className="max-w-[680px] mx-auto text-center">
-          {/* Logo mark */}
-          <div className="mb-8 flex justify-center">
-            <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-bold text-white" style={{ background: "linear-gradient(135deg, #394EFF 0%, #6366f1 100%)" }}>
-              CS
-            </div>
-          </div>
+        <p className="hero-lede">
+          扫描可疑技能、GitHub 仓库和安装包，通过验证注册表安全分发。
+        </p>
 
-          <h1 className="text-[28px] font-semibold tracking-tight mb-3" style={{ color: "#e0e0e8" }}>
-            分析可疑的 Agent Skill
-          </h1>
-          <p className="text-[14px] mb-8" style={{ color: "#6b6b82" }}>
-            扫描 OpenClaw Skill、MCP Server、Claude Code Skill 中的安全漏洞和恶意行为
-          </p>
+        <div className="hero-tabs">
+          {HERO_TABS.map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              className={mode === tab.id ? "hero-tab active" : "hero-tab"}
+              onClick={() => setMode(tab.id)}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
 
-          {/* Search Box — the core */}
-          <div className="relative mb-4">
-            <div className="flex items-center rounded-xl overflow-hidden" style={{ background: "#1e1e32", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <div className="pl-4 pr-3 flex items-center" style={{ color: "#6b6b82" }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                </svg>
-              </div>
+        <div className="hero-search-stack">
+          <div className="hero-search-card">
+            <label className="scan-input">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="7" />
+                <path d="m20 20-3.5-3.5" />
+              </svg>
               <input
-                type="text"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                placeholder="输入 GitHub 仓库 URL 或 ClawHub Skill 地址"
-                className="flex-1 py-3.5 bg-transparent text-[14px] outline-none placeholder:text-[#4a4a60]"
-                style={{ color: "#e0e0e8" }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && url.trim()) {
-                    window.location.href = `/scan?url=${encodeURIComponent(url.trim())}`;
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="URL、GitHub 仓库、@发布者/技能名、文件哈希"
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    runSearch();
                   }
                 }}
               />
-              <button
-                onClick={() => {
-                  if (url.trim()) window.location.href = `/scan?url=${encodeURIComponent(url.trim())}`;
-                }}
-                className="px-5 py-3.5 text-[13px] font-medium text-white transition-colors cursor-pointer"
-                style={{ background: "#394EFF" }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = "#4d5fff")}
-                onMouseLeave={(e) => (e.currentTarget.style.background = "#394EFF")}
-              >
-                扫描
-              </button>
+            </label>
+            <button type="button" className="primary-button" onClick={runSearch}>
+              搜索
+            </button>
+          </div>
+
+          <div className="threat-banner">
+            当消费端 tree hash 与发布端不一致时，ClawHavoc 类篡改会被自动拦截。
+          </div>
+        </div>
+
+        <div className="tool-strip">
+          {compatibleTools.map((tool) => (
+            <span key={tool} className="tool-chip">
+              {tool}
+            </span>
+          ))}
+        </div>
+      </section>
+
+      <section className="container stacked-section">
+        <div className="stats-grid">
+          {homeStats.map((stat) => (
+            <div key={stat.label} className="stat-card">
+              <strong>{stat.value}</strong>
+              <span>{stat.label}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="container stacked-section">
+        <div className="section-heading">
+          <div>
+            <div className="eyebrow">注册表机制</div>
+            <h2>先搜索，再信任，哈希一致才安装。</h2>
+          </div>
+          <p>
+            交互面刻意做得简单：一个搜索框、一份报告、一条安装路径。背后注册表的保存、分享和验证状态始终可见。
+          </p>
+        </div>
+
+        <div className="feature-grid">
+          {trustPrograms.map((item) => (
+            <article key={item.title} className="feature-card">
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="container stacked-section">
+        <div className="section-heading">
+          <div>
+            <div className="eyebrow">验证流程</div>
+            <h2>发布端扫描、消费端复检、显式交接。</h2>
+          </div>
+          <p>
+            如果同一个技能要在团队和不同 AI 工具间流转，这是最低的安全门槛。
+          </p>
+        </div>
+
+        <div className="split-grid">
+          {verificationModes.map((item) => (
+            <article key={item.title} className="panel">
+              <div className="eyebrow">{item.title}</div>
+              <p>{item.detail}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="container stacked-section">
+        <div className="section-heading">
+          <div>
+            <div className="eyebrow">热门技能</div>
+            <h2>不同信任状态的注册表条目。</h2>
+          </div>
+          <p>
+            已验证、存在偏差、技能集——在同一界面展示，让运维人员一眼区分安全分发和待审队列。
+          </p>
+        </div>
+
+        <div className="skills-grid">
+          {registrySkills.slice(0, 3).map((skill) => (
+            <SkillCard key={`${skill.publisher}-${skill.slug}`} skill={skill} />
+          ))}
+        </div>
+      </section>
+
+      <section className="container stacked-section">
+        <div className="section-heading">
+          <div>
+            <div className="eyebrow">快速开始</div>
+            <h2>安装、保存、分享、验证，一套命令搞定。</h2>
+          </div>
+          <p>
+            当前为静态原型，但命令和页面结构已与后端 API 对齐。
+          </p>
+        </div>
+
+        <div className="split-grid">
+          <div className="command-block">
+            <div className="command-line">
+              <div>
+                <div className="eyebrow">安装到 AI 工具</div>
+                <code>Create clawsafety registry skill from https://clawsafe.dev/skill.md</code>
+              </div>
+              <CopyCommand
+                command="Create clawsafety registry skill from https://clawsafe.dev/skill.md"
+              />
             </div>
           </div>
 
-          {/* Tabs under search */}
-          <div className="flex justify-center gap-6 text-[12px] mb-12" style={{ color: "#5a5a72" }}>
-            <span className="pb-1" style={{ borderBottom: "2px solid #394EFF", color: "#394EFF" }}>URL</span>
-            <span className="pb-1 cursor-pointer hover:text-white transition">文件上传</span>
-            <span className="pb-1 cursor-pointer hover:text-white transition">Skill 搜索</span>
-          </div>
-        </div>
-      </section>
-
-      {/* Alert Banner */}
-      <section className="px-6 mb-12">
-        <div className="max-w-[680px] mx-auto">
-          <div className="rounded-lg px-4 py-3 flex items-center gap-3 text-[13px]" style={{ background: "rgba(244,67,54,0.08)", border: "1px solid rgba(244,67,54,0.15)" }}>
-            <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: "#f44336" }} />
-            <span style={{ color: "#f4a0a0" }}>
-              <strong style={{ color: "#f44336" }}>ClawHavoc</strong> — 1,184 个恶意 Skill 确认，C2: 91.92.242.30
-              <Link href="/blog/clawhavoc-amos" className="ml-2 underline" style={{ color: "#8888a0" }}>详情</Link>
-            </span>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Row */}
-      <section className="px-6 pb-16">
-        <div className="max-w-[900px] mx-auto">
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-px rounded-xl overflow-hidden" style={{ background: "rgba(255,255,255,0.04)" }}>
-            {[
-              { v: "23", l: "扫描规则" },
-              { v: "6", l: "规则类别" },
-              { v: "46", l: "已扫描 Skill" },
-              { v: "8", l: "C2 IP" },
-              { v: "9", l: "恶意域名" },
-              { v: "4", l: "研究报告" },
-            ].map((s) => (
-              <div key={s.l} className="text-center py-5" style={{ background: "#1a1a2e" }}>
-                <div className="text-[22px] font-semibold" style={{ color: "#e0e0e8" }}>{s.v}</div>
-                <div className="text-[11px] mt-0.5" style={{ color: "#5a5a72" }}>{s.l}</div>
+          <div className="command-block">
+            <div className="command-line">
+              <div>
+                <div className="eyebrow">CLI 命令</div>
+                <code>{`clawsafety scan ./my-skill --format json
+clawsafety registry save ./my-skill --version 1.0.0
+clawsafety registry install @clawsafe/repo-audit@1.4.2`}</code>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Compatible Tools */}
-      <section className="px-6 pb-16">
-        <div className="max-w-[900px] mx-auto">
-          <div className="text-[12px] text-center mb-4" style={{ color: "#5a5a72" }}>兼容平台</div>
-          <div className="flex flex-wrap justify-center gap-2">
-            {["Claude Code", "OpenClaw", "Cursor", "Windsurf", "Codex", "Gemini", "Cline", "Roo", "Goose", "MCP Server"].map((t) => (
-              <span key={t} className="px-3 py-1 rounded-md text-[12px]" style={{ background: "#1a1a2e", color: "#7a7a92", border: "1px solid rgba(255,255,255,0.05)" }}>
-                {t}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works — clean 3 col */}
-      <section className="px-6 pb-16">
-        <div className="max-w-[900px] mx-auto">
-          <h2 className="text-[18px] font-semibold text-center mb-8" style={{ color: "#e0e0e8" }}>工作流程</h2>
-          <div className="grid md:grid-cols-3 gap-4">
-            {[
-              { n: "01", t: "提交", d: "粘贴 GitHub URL 或上传 Skill 目录" },
-              { n: "02", t: "扫描", d: "23 条规则 + IOC 数据库深度检测" },
-              { n: "03", t: "报告", d: "A-F 评分、逐条发现、修复建议" },
-            ].map((s) => (
-              <div key={s.n} className="rounded-xl p-5" style={{ background: "#1a1a2e", border: "1px solid rgba(255,255,255,0.05)" }}>
-                <div className="text-[11px] font-mono mb-3" style={{ color: "#394EFF" }}>{s.n}</div>
-                <div className="text-[15px] font-semibold mb-1" style={{ color: "#e0e0e8" }}>{s.t}</div>
-                <div className="text-[13px]" style={{ color: "#6b6b82" }}>{s.d}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Comparison */}
-      <section className="px-6 pb-16">
-        <div className="max-w-[900px] mx-auto">
-          <h2 className="text-[18px] font-semibold text-center mb-8" style={{ color: "#e0e0e8" }}>对比</h2>
-          <div className="grid md:grid-cols-3 gap-4">
-            <CompareCol
-              title="无扫描"
-              titleColor="#6b6b82"
-              items={[
-                { text: "无安全审查", type: "bad" },
-                { text: "恶意 Skill 自由安装", type: "bad" },
-                { text: "出事后才发现", type: "bad" },
-              ]}
-            />
-            <CompareCol
-              title="标签扫描"
-              titleColor="#ff9800"
-              items={[
-                { text: "安装时扫描", type: "ok" },
-                { text: "高危仅显示警告", type: "ok" },
-                { text: "无 IOC 威胁情报", type: "bad" },
-              ]}
-            />
-            <CompareCol
-              title="ClawSafe"
-              titleColor="#394EFF"
-              highlight
-              items={[
-                { text: "23 条规则 + IOC 深度扫描", type: "good" },
-                { text: "A-F 评分 + 修复建议", type: "good" },
-                { text: "4 大攻击活动 IOC 实时更新", type: "good" },
-              ]}
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* CLI Preview */}
-      <section className="px-6 pb-16">
-        <div className="max-w-[680px] mx-auto">
-          <h2 className="text-[18px] font-semibold text-center mb-8" style={{ color: "#e0e0e8" }}>命令行</h2>
-          <div className="rounded-xl overflow-hidden" style={{ background: "#0d1117", border: "1px solid rgba(255,255,255,0.06)" }}>
-            <div className="flex items-center gap-2 px-4 py-2.5" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)" }}>
-              <div className="w-2.5 h-2.5 rounded-full" style={{ background: "#ff5f57" }} />
-              <div className="w-2.5 h-2.5 rounded-full" style={{ background: "#febc2e" }} />
-              <div className="w-2.5 h-2.5 rounded-full" style={{ background: "#28c840" }} />
+              <CopyCommand
+                command={`clawsafety scan ./my-skill --format json
+clawsafety registry save ./my-skill --version 1.0.0
+clawsafety registry install @clawsafe/repo-audit@1.4.2`}
+              />
             </div>
-            <pre className="p-5 text-[12px] font-mono leading-relaxed overflow-x-auto" style={{ color: "#8b949e" }}>
-{`$ cargo install clawsafety
-$ clawsafety scan ./my-skill/
-
-  `}<span style={{ color: "#e0e0e8" }}>ClawSafe v0.1.0</span>{`
-  Findings: 3
-
-  `}<span style={{ color: "#f44336" }}>CRITICAL</span>{`  CS-IOC-001  已知 C2 IP: `}<span style={{ color: "#f44336" }}>91.92.242.30</span>{`
-  `}<span style={{ color: "#ff9800" }}>HIGH</span>{`      CS-INJ-001  Shell 命令注入
-  `}<span style={{ color: "#e5c07b" }}>MEDIUM</span>{`    CS-DEP-002  依赖版本未锁定
-
-  Score: `}<span style={{ color: "#f44336" }}>22/100 (F)</span>
-            </pre>
           </div>
         </div>
       </section>
 
-      {/* Features Grid */}
-      <section className="px-6 pb-16">
-        <div className="max-w-[900px] mx-auto">
-          <h2 className="text-[18px] font-semibold text-center mb-8" style={{ color: "#e0e0e8" }}>能力</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {[
-              { t: "注入检测", d: "Shell / SQL / RCE / 反弹 Shell" },
-              { t: "密钥扫描", d: "API Key / 密码 / 私钥 / Token" },
-              { t: "供应链审计", d: "依赖漏洞 / 版本锁定 / 不安全安装" },
-              { t: "权限分析", d: "敏感路径 / 环境变量 / 文件权限" },
-              { t: "IOC 匹配", d: "C2 IP / 恶意域名 / 恶意发布者" },
-              { t: "Prompt 注入", d: "SKILL.md / MCP description 注入" },
-            ].map((f) => (
-              <div key={f.t} className="rounded-xl p-4" style={{ background: "#1a1a2e", border: "1px solid rgba(255,255,255,0.05)" }}>
-                <div className="text-[14px] font-medium mb-1" style={{ color: "#e0e0e8" }}>{f.t}</div>
-                <div className="text-[12px]" style={{ color: "#5a5a72" }}>{f.d}</div>
-              </div>
-            ))}
+      <section className="container stacked-section">
+        <div className="callout-card">
+          <div className="section-heading">
+            <div>
+              <div className="eyebrow">下一步</div>
+              <h2>从发现到治理，不用切换上下文。</h2>
+            </div>
+            <p>
+              从首页搜索，浏览注册表，检查技能详情，再跳转到文档、定价或控制台——一条线走完。
+            </p>
+          </div>
+
+          <div className="skill-card-actions">
+            <Link href="/skills" className="primary-button">
+              浏览技能库
+            </Link>
+            <Link href="/docs" className="ghost-button">
+              查看文档
+            </Link>
           </div>
         </div>
       </section>
-
-      {/* Research / Blog */}
-      <section className="px-6 pb-16">
-        <div className="max-w-[900px] mx-auto">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-[18px] font-semibold" style={{ color: "#e0e0e8" }}>安全研究</h2>
-            <Link href="/blog" className="text-[12px] hover:underline" style={{ color: "#394EFF" }}>查看全部</Link>
-          </div>
-          <div className="grid md:grid-cols-2 gap-3">
-            {[
-              { slug: "sandworm-mcp-worm", t: "SANDWORM_MODE：npm 仿冒包传播的 MCP 蠕虫", tag: "供应链", c: "#f44336" },
-              { slug: "clawhavoc-amos", t: "677 个恶意 Skill：AMOS 窃密木马分发链", tag: "恶意软件", c: "#ff9800" },
-              { slug: "mcp-tool-poisoning", t: "MCP Tool Poisoning：SSH Key 窃取实战", tag: "MCP", c: "#9c27b0" },
-              { slug: "clawhavoc-bob-p2p", t: "假 Polymarket Skill 窃取 Solana 钱包", tag: "威胁", c: "#f44336" },
-            ].map((p) => (
-              <Link key={p.slug} href={`/blog/${p.slug}`} className="group rounded-lg p-4 transition-colors" style={{ background: "#1a1a2e", border: "1px solid rgba(255,255,255,0.05)" }}>
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-medium" style={{ background: `${p.c}18`, color: p.c }}>{p.tag}</span>
-                </div>
-                <div className="text-[13px] font-medium group-hover:underline" style={{ color: "#c0c0d0" }}>{p.t}</div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="px-6 py-8" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-        <div className="max-w-[900px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded flex items-center justify-center text-[9px] font-bold text-white" style={{ background: "#394EFF" }}>CS</div>
-            <span className="text-[12px]" style={{ color: "#5a5a72" }}>&copy; 2026 YiSec</span>
-          </div>
-          <div className="flex gap-5 text-[12px]" style={{ color: "#5a5a72" }}>
-            <Link href="/blog" className="hover:text-white transition">Research</Link>
-            <Link href="/ioc" className="hover:text-white transition">IOC</Link>
-            <a href="https://github.com/relaxcloud-cn/clawsafety" target="_blank" className="hover:text-white transition">GitHub</a>
-            <a href="https://yisec.ai" target="_blank" className="hover:text-white transition">YiSec</a>
-          </div>
-        </div>
-      </footer>
-    </main>
-  );
-}
-
-function CompareCol({ title, titleColor, items, highlight }: {
-  title: string;
-  titleColor: string;
-  items: { text: string; type: "good" | "ok" | "bad" }[];
-  highlight?: boolean;
-}) {
-  return (
-    <div
-      className="rounded-xl p-5"
-      style={{
-        background: highlight ? "rgba(57,78,255,0.06)" : "#1a1a2e",
-        border: highlight ? "1px solid rgba(57,78,255,0.2)" : "1px solid rgba(255,255,255,0.05)",
-      }}
-    >
-      <div className="text-[14px] font-semibold mb-4" style={{ color: titleColor }}>{title}</div>
-      <div className="space-y-2.5">
-        {items.map((item, i) => (
-          <div key={i} className="flex items-start gap-2 text-[12px]">
-            <span style={{ color: item.type === "good" ? "#4caf50" : item.type === "ok" ? "#ff9800" : "#f44336" }}>
-              {item.type === "good" ? "✓" : item.type === "ok" ? "~" : "✗"}
-            </span>
-            <span style={{ color: "#9a9ab0" }}>{item.text}</span>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }
