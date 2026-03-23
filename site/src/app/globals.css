@@ -1,8 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+  --background: #131320;
+  --foreground: #e0e0e8;
+  --accent: #394EFF;
+  --accent-hover: #4d5fff;
+  --surface: #1a1a2e;
+  --surface-hover: #22223a;
+  --border: rgba(255, 255, 255, 0.08);
+  --danger: #f44336;
+  --safe: #4caf50;
+  --warning: #ff9800;
 }
 
 @theme inline {
@@ -15,5 +23,13 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+::selection {
+  background: var(--accent);
+  color: white;
 }
