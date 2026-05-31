@@ -4,6 +4,10 @@ use std::path::{Path, PathBuf};
 pub enum Language {
     Bash,
     Python,
+    JavaScript,
+    TypeScript,
+    Ruby,
+    Php,
     Yaml,
     Toml,
     Markdown,
@@ -16,6 +20,10 @@ impl Language {
         match ext {
             "sh" | "bash" => Language::Bash,
             "py" => Language::Python,
+            "js" | "jsx" | "mjs" | "cjs" => Language::JavaScript,
+            "ts" | "tsx" | "mts" | "cts" => Language::TypeScript,
+            "rb" => Language::Ruby,
+            "php" => Language::Php,
             "yaml" | "yml" => Language::Yaml,
             "toml" => Language::Toml,
             "md" => Language::Markdown,
@@ -46,7 +54,7 @@ impl FileContext {
         let language = path
             .extension()
             .and_then(|e| e.to_str())
-            .map(Language::from_extension)
+            .map(|e| Language::from_extension(&e.to_ascii_lowercase()))
             .unwrap_or(Language::Unknown);
 
         Ok(Self {
@@ -59,7 +67,15 @@ impl FileContext {
     }
 
     pub fn is_script(&self) -> bool {
-        matches!(self.language, Language::Bash | Language::Python)
+        matches!(
+            self.language,
+            Language::Bash
+                | Language::Python
+                | Language::JavaScript
+                | Language::TypeScript
+                | Language::Ruby
+                | Language::Php
+        )
     }
 }
 

@@ -4,6 +4,7 @@ pub mod dependencies;
 pub mod permissions;
 pub mod config;
 pub mod ioc;
+pub mod open_core;
 
 use crate::scanner::{FileContext, SkillContext};
 
@@ -62,6 +63,14 @@ pub enum Category {
     Permissions,
     Config,
     Ioc,
+    CodeExecution,
+    CredentialTheft,
+    DataExfiltration,
+    Filesystem,
+    PrivilegeEscalation,
+    Persistence,
+    Obfuscation,
+    SupplyChain,
 }
 
 impl std::fmt::Display for Category {
@@ -73,6 +82,14 @@ impl std::fmt::Display for Category {
             Category::Permissions => write!(f, "Permissions"),
             Category::Config => write!(f, "Config"),
             Category::Ioc => write!(f, "IOC"),
+            Category::CodeExecution => write!(f, "CodeExec"),
+            Category::CredentialTheft => write!(f, "Credential"),
+            Category::DataExfiltration => write!(f, "Exfiltration"),
+            Category::Filesystem => write!(f, "Filesystem"),
+            Category::PrivilegeEscalation => write!(f, "Privilege"),
+            Category::Persistence => write!(f, "Persistence"),
+            Category::Obfuscation => write!(f, "Obfuscation"),
+            Category::SupplyChain => write!(f, "SupplyChain"),
         }
     }
 }
@@ -159,6 +176,21 @@ pub fn all_rules() -> Vec<Box<dyn Rule>> {
     rules.push(Box::new(ioc::C2IpDetection));
     rules.push(Box::new(ioc::MaliciousDomainDetection));
     rules.push(Box::new(ioc::MaliciousPublisherDetection));
+
+    // Open-core rule families ported from the private platform's public scanner model.
+    rules.push(Box::new(open_core::CommandExecutionSurface));
+    rules.push(Box::new(open_core::DynamicCodeEvaluation));
+    rules.push(Box::new(open_core::OutboundDataPost));
+    rules.push(Box::new(open_core::DnsExfiltration));
+    rules.push(Box::new(open_core::CredentialStoreAccess));
+    rules.push(Box::new(open_core::SensitiveFileAccess));
+    rules.push(Box::new(open_core::DestructiveFileOperation));
+    rules.push(Box::new(open_core::PrivilegeEscalation));
+    rules.push(Box::new(open_core::PersistenceMechanism));
+    rules.push(Box::new(open_core::ObfuscatedPayload));
+    rules.push(Box::new(open_core::SuspiciousPackageInstall));
+    rules.push(Box::new(open_core::BundledBinary));
+    rules.push(Box::new(open_core::InducementLanguage));
 
     rules
 }

@@ -2,7 +2,7 @@
 
 ## 规则体系概览
 
-ClawSafety 扫描规则分为 5 大类，MVP 阶段实现 20 条核心规则。
+ClawSafety 扫描规则分为基础规则与 open-core 增强规则。当前实现 36 条规则：20 条 MVP 核心规则、3 条 IOC 规则、13 条 open-core 规则。
 
 每条规则包含：
 - **ID**: `CS-{类别}-{编号}` (e.g., CS-INJ-001)
@@ -266,14 +266,36 @@ ClawSafety 扫描规则分为 5 大类，MVP 阶段实现 20 条核心规则。
 
 ---
 
+## 6. Open-Core 增强规则
+
+这些规则来自私有平台中可公开的扫描语义，已在公开仓以 Rust 重新实现，不携带私有后台、数据集、部署脚本或 Git 历史。
+
+| ID | 严重性 | 类别 | 检测重点 |
+|----|--------|------|----------|
+| `CS-EXE-001` | High | CodeExec | subprocess、child_process、shell_exec 等命令执行面 |
+| `CS-EXE-002` | High | CodeExec | eval、Function、compile 等动态代码执行 |
+| `CS-EXT-001` | High | Exfiltration | 外部 HTTP POST |
+| `CS-EXT-002` | High | Exfiltration | DNS/OAST 外传模式 |
+| `CS-CRT-001` | Critical | Credential | SSH、Keychain、Credential Store、云元数据访问 |
+| `CS-FS-001` | High | Filesystem | 环境文件、shell history、浏览器凭证等敏感文件 |
+| `CS-FS-002` | Critical | Filesystem | 危险删除和磁盘覆盖 |
+| `CS-PRS-001` | Critical | Privilege | sudo、su、doas、setuid/setgid |
+| `CS-PER-001` | High | Persistence | cron、systemd、LaunchAgent、shell 启动文件、agent 记忆文件 |
+| `CS-OBF-001` | Medium | Obfuscation | Base64、字符码、十六进制混淆 |
+| `CS-SC-001` | High | SupplyChain | 不安全 registry、curl-pipe、typosquat 包名 |
+| `CS-SC-002` | High | SupplyChain | 捆绑预编译二进制 |
+| `CS-CFG-005` | Medium | Config | 诱导 agent 预执行脚本的文案 |
+
+---
+
 ## 规则严重性统计
 
 | 严重性 | 数量 | 规则 |
 |--------|------|------|
-| **Critical** | 5 | INJ-001, INJ-002, INJ-004, SEC-001, SEC-002, SEC-003 |
-| **High** | 6 | INJ-003, SEC-004, DEP-001, DEP-003, PRM-002, CFG-001 |
-| **Medium** | 6 | DEP-002, DEP-004, PRM-001, PRM-003, CFG-003, CFG-004 |
-| **Low** | 3 | PRM-004, CFG-002 |
+| **Critical** | 10 | INJ-001, INJ-002, INJ-004, SEC-001, SEC-002, SEC-003, IOC-001, CRT-001, FS-002, PRS-001 |
+| **High** | 16 | INJ-003, SEC-004, DEP-001, DEP-003, PRM-002, CFG-001, IOC-002, IOC-003, EXE-001, EXE-002, EXT-001, EXT-002, FS-001, PER-001, SC-001, SC-002 |
+| **Medium** | 8 | DEP-002, DEP-004, PRM-001, PRM-003, CFG-003, CFG-004, OBF-001, CFG-005 |
+| **Low** | 2 | PRM-004, CFG-002 |
 
 ---
 

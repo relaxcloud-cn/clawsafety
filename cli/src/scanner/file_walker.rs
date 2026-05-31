@@ -4,7 +4,10 @@ use walkdir::WalkDir;
 use super::context::FileContext;
 
 const SKIP_DIRS: &[&str] = &[".git", "node_modules", "__pycache__", ".venv", "target"];
-const SCAN_EXTENSIONS: &[&str] = &["sh", "bash", "py", "yaml", "yml", "toml", "md", "txt", "cfg", "ini", "json"];
+const SCAN_EXTENSIONS: &[&str] = &[
+    "sh", "bash", "py", "js", "jsx", "mjs", "cjs", "ts", "tsx", "mts", "cts", "rb", "php", "yaml",
+    "yml", "toml", "md", "txt", "cfg", "ini", "json",
+];
 
 pub fn walk_skill(path: &Path) -> anyhow::Result<Vec<FileContext>> {
     let mut files = Vec::new();
@@ -25,9 +28,10 @@ pub fn walk_skill(path: &Path) -> anyhow::Result<Vec<FileContext>> {
             .path()
             .extension()
             .and_then(|e| e.to_str())
-            .unwrap_or("");
+            .unwrap_or("")
+            .to_ascii_lowercase();
 
-        if !SCAN_EXTENSIONS.contains(&ext) {
+        if !SCAN_EXTENSIONS.contains(&ext.as_str()) {
             continue;
         }
 

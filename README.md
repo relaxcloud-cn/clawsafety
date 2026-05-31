@@ -34,7 +34,16 @@ clawsafety scan ./my-skill/ --format json
 | **Secrets** (SEC) | 4 | Hardcoded passwords, API keys, private keys |
 | **Dependencies** (DEP) | 4 | Unpinned versions, known CVEs, curl-pipe-bash |
 | **Permissions** (PRM) | 4 | Excessive access, sensitive paths, env abuse |
-| **Config** (CFG) | 4 | Missing SKILL.md, prompt injection risks |
+| **Config** (CFG) | 5 | Missing SKILL.md, prompt injection risks, inducement language |
+| **IOC** (IOC) | 3 | Known C2 IPs, malicious domains, malicious publishers |
+| **Code execution** (EXE) | 2 | subprocess, child_process, eval, dynamic Function |
+| **Data exfiltration** (EXT) | 2 | External POST, DNS/OAST exfiltration |
+| **Credential theft** (CRT) | 1 | SSH keys, credential stores, cloud metadata |
+| **Filesystem** (FS) | 2 | Sensitive files, destructive file operations |
+| **Privilege** (PRS) | 1 | sudo, su, doas, setuid/setgid |
+| **Persistence** (PER) | 1 | cron, systemd, LaunchAgent, shell startup files |
+| **Obfuscation** (OBF) | 1 | Base64, character-code, hex payloads |
+| **Supply Chain** (SC) | 2 | Insecure registries, curl-pipe, bundled binaries |
 
 ## Security Score
 
@@ -59,9 +68,14 @@ Connect your repository for automated scanning on every push and PR.
 ## Roadmap
 
 - [x] v0.1 - CLI scanner with 20 rules
+- [x] v0.1.1 - Open-core rule families ported into Rust CLI (36 total rules)
 - [ ] v0.2 - GitHub App integration + Web Dashboard
 - [ ] v0.3 - Auto-fix PRs + Public URL scanning
 - [ ] v1.0 - Enterprise: team management, runtime monitoring, SBOM
+
+## Open-Core Boundary
+
+This repository contains the open scanner, CLI, public documentation, and safe public samples. Private SaaS operations, admin dashboards, deployment scripts, crawled datasets, credentials, and private repository history are intentionally excluded. See [docs/OPEN_CORE_MIGRATION.md](docs/OPEN_CORE_MIGRATION.md) for the migration boundary and release checklist.
 
 ## Built by
 
